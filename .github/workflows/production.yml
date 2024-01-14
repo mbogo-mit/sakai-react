@@ -3,7 +3,7 @@ name: Deploy API72-NextJs App [production]
 on:
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [master2]
 
 jobs:
   deploy-production:
