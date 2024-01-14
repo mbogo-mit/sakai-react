@@ -1,0 +1,46 @@
+# GitHub Action for Serverless NextJS staging environment
+
+name: Deploy API72-NextJs App [production]
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+jobs:
+  deploy-production:
+    name: deploy-production
+    environment: Production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Copy serverless-prod.yml to serverless.yml
+        uses: canastro/copy-file-action@master
+        with:
+          source: "serverless-prod.yml"
+          target: "serverless.yml"
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies (with --force)
+        run: npm ci --force
+
+      - name: Serverless AWS authentication
+        run: npx serverless --component=serverless-next config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deploy to AWS
+        run: npx serverless
+        env:
+        
