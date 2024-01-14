@@ -42,5 +42,4 @@ jobs:
 
       - name: Deploy to AWS
         run: npx serverless
-        env:
-          
+        # env:

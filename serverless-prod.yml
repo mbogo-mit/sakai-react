@@ -6,7 +6,7 @@ API72NextJsApp:
       env:
         
     cloudfront:
-      distributionId: api72nextjsapppreviewbucket
+      distributionId: ECDG24VLI01WT
       defaults:
         forward:
           headers:
