@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build-and-deploy:
+    environment: Production
     name: Build and Deploy
     runs-on: ubuntu-latest
 
