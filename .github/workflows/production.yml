@@ -1,10 +1,10 @@
-# GitHub Action for Serverless NextJS staging environment
-
 name: Deploy API72-NextJs App [production]
+
 on:
   workflow_dispatch:
   push:
     branches: [master]
+
 jobs:
   deploy-production:
     name: deploy-production
@@ -22,7 +22,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      
+
       - name: Copy serverless-prod.yml to serverless.yml
         uses: canastro/copy-file-action@master
         with:
@@ -37,10 +37,12 @@ jobs:
       - name: Install dependencies (with --force)
         run: npm i
 
+      - name: Install Serverless CLI
+        run: npm install -g @serverless/cli
+
       - name: Serverless AWS authentication
-        run: npx serverless --component=serverless-next config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: components-v1 --component=serverless-next config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy to AWS
-        run: npx serverless
+        run: components-v1 deploy
         # env:
-        

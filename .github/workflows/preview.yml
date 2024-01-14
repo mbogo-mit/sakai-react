@@ -35,11 +35,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies (with --force)
-        run: npm ci --force
+        run: npm i
+
+      - name: Install Serverless CLI
+        run: npm install -g @serverless/cli
 
       - name: Serverless AWS authentication
-        run: npx serverless --component=serverless-next config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: components-v1 --component=serverless-next config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy to AWS
-        run: npx serverless
+        run: components-v1 deploy
         # env:
